@@ -1,0 +1,14 @@
+### Update Patient
+PUT http://localhost:4000/patients/223e4567-e89b-12d3-a456-426614174012
+Content-Type: application/json
+
+{
+  "name": "David Lewis",
+  "address": "Negob cloomnog",
+  "email": "cnelu@gmail.com",
+  "phone": "0713805613",
+  "dateOfBirth": "2000-08-19"
+
+}
+
+###
