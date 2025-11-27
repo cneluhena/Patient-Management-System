@@ -6,6 +6,7 @@ import com.cn.patientservice.dto.PatientResponseDTO;
 import com.cn.patientservice.entity.Patient;
 import com.cn.patientservice.exception.EmailAlreadyExistsException;
 import com.cn.patientservice.exception.PatientNotFoundException;
+import com.cn.patientservice.grpc.BillingServiceGrpcClient;
 import com.cn.patientservice.mapper.PatientMapper;
 import com.cn.patientservice.repository.PatientRepository;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,12 @@ import java.util.stream.Collectors;
 @Service
 public class PatientService {
 
-    private PatientRepository patientRepository;
+    private final PatientRepository patientRepository;
 
-    public PatientService(PatientRepository patientRepository) {
+    private final BillingServiceGrpcClient billingServiceGrpcClient;
+
+    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient) {
+        this.billingServiceGrpcClient = billingServiceGrpcClient;
         this.patientRepository = patientRepository;
     }
 
@@ -35,6 +39,7 @@ public class PatientService {
             throw new EmailAlreadyExistsException("Patient wit email: " + patientRequestDTO.getEmail() + " already exists");
         }
         Patient newPatient = patientRepository.save(PatientMapper.toEntity(patientRequestDTO));
+        billingServiceGrpcClient.createBillingAccount(newPatient.getId().toString(), newPatient.getName(), newPatient.getEmail());
         return PatientMapper.toDTO(newPatient);
     }
 
