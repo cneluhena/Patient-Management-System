@@ -7,6 +7,7 @@ import com.cn.patientservice.entity.Patient;
 import com.cn.patientservice.exception.EmailAlreadyExistsException;
 import com.cn.patientservice.exception.PatientNotFoundException;
 import com.cn.patientservice.grpc.BillingServiceGrpcClient;
+import com.cn.patientservice.kafka.KafkaProducer;
 import com.cn.patientservice.mapper.PatientMapper;
 import com.cn.patientservice.repository.PatientRepository;
 import org.springframework.stereotype.Service;
@@ -24,9 +25,12 @@ public class PatientService {
 
     private final BillingServiceGrpcClient billingServiceGrpcClient;
 
-    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient) {
+    private final KafkaProducer kafkaProducer;
+
+    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient, KafkaProducer  kafkaProducer) {
         this.billingServiceGrpcClient = billingServiceGrpcClient;
         this.patientRepository = patientRepository;
+        this.kafkaProducer = kafkaProducer;
     }
 
     public List<PatientResponseDTO> getAllPatients() {
@@ -35,11 +39,14 @@ public class PatientService {
     }
 
     public PatientResponseDTO createPatient(PatientRequestDTO patientRequestDTO) {
+
         if (patientRepository.existsByEmail(patientRequestDTO.getEmail())) {
             throw new EmailAlreadyExistsException("Patient wit email: " + patientRequestDTO.getEmail() + " already exists");
         }
+
         Patient newPatient = patientRepository.save(PatientMapper.toEntity(patientRequestDTO));
         billingServiceGrpcClient.createBillingAccount(newPatient.getId().toString(), newPatient.getName(), newPatient.getEmail());
+        kafkaProducer.sendEvent(newPatient);
         return PatientMapper.toDTO(newPatient);
     }
 
@@ -62,6 +69,8 @@ public class PatientService {
     public void deletePatient(UUID id) {
         patientRepository.deleteById(id);
     }
+
+
 
 
 }

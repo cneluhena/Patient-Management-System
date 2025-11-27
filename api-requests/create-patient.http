@@ -3,8 +3,8 @@ POST http://localhost:4000/patients
 Content-Type: application/json
 
 {
-  "name": "Chamod Neluhena",
-  "email": "cneluhena@gmail.com",
+  "name": "Chamod Neluhe",
+  "email": "cndfsdft@gmail.com",
   "address": "Negombo Kurana",
   "phone": "0713805613",
   "dateOfBirth": "2000-08-19",

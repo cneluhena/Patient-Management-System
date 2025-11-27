@@ -2,7 +2,7 @@ GRPC localhost:9001/BillingService/CreateBillingAccount
 Content-Type: application/json
 
 {
-  "patientId": "123456",
+  "patientId": "121561456",
   "name": "John Doe",
   "email": "john.doe@example.com"
 }
