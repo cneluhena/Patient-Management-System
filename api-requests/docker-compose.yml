@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  backend:
+    image: patient-service-db:latest
+    container_name: patient-service-db
+    networks:
+      - internal
+    ports:
+      - ":8080"
+    environment:
+      - POSTGRES_USER=admin_user
+      - POSTGRES_DB=db
+      - POSTGRES_PASSWORD=mysecretpassword
+
+    volumes:
+      - D:/Chamod/Projects/DB/patient-service-db:/var/lib/postgresql/data
+
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-server
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RMQ_PASSWORD}
