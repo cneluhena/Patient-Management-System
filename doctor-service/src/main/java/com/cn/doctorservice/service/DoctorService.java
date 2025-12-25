@@ -35,8 +35,10 @@ public class DoctorService {
     @Transactional
     public DoctorDTO updateDoctor(UUID id, DoctorDTO doctorDTO) {
 
-        if (doctorRepository.findById(id).isEmpty()) {
+        Optional<Doctor> optional = doctorRepository.findById(id);
+        if (optional.isEmpty()) {
             throw new DoctorNotExists("Doctor Not Exists");
+
         }
 
         List<Specialization> specializations = specializationService.findSpecializationsThatExists(doctorDTO.getSpecializations());

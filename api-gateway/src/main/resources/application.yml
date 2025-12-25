@@ -19,4 +19,11 @@ spring:
               args:
                 pattern: /api/v1/appointment/**
 
+        - id: appointment-service-circuit-route
+          uri: http://localhost:4009
+          predicates:
+            - name: Path
+              args:
+                pattern: /doctor/circuit
+
 

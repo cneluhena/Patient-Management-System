@@ -1,0 +1,42 @@
+grpc:
+  client:
+    doctor-service:
+      address: "static://localhost:9005"
+      negotiation-type: plaintext
+
+server:
+  port: 4009
+
+spring:
+  config:
+    import: "optional:file:.env[.properties]"
+
+  datasource:
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: ${DB_URL}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      doctorService:
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        recordExceptions:
+          - io.grpc.StatusRuntimeException
+        ignoreExceptionPredicate: com.cn.appointmentservice.cb.GrpcBusinessExceptionPredicate
+
+  timelimiter:
+    instances:
+      doctorService:
+        timeoutDuration: 2s
+

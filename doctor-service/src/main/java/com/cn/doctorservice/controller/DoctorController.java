@@ -27,19 +27,19 @@ public class DoctorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DoctorDTO> getDoctorById(@PathVariable UUID id){
+    public ResponseEntity<DoctorDTO> getDoctorById(@PathVariable("id") UUID id){
         DoctorDTO dto = doctorService.getDoctorById(id);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DoctorDTO> updateDoctorById(@PathVariable UUID id, @RequestBody DoctorDTO doctorDTO){
+    public ResponseEntity<DoctorDTO> updateDoctorById(@PathVariable("id") UUID id, @RequestBody DoctorDTO doctorDTO){
         DoctorDTO dto = doctorService.updateDoctor(id, doctorDTO);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<DoctorDTO> deleteDoctorById(@PathVariable UUID id){
+    public ResponseEntity<DoctorDTO> deleteDoctorById(@PathVariable("id") UUID id){
         doctorService.deleteDoctor(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

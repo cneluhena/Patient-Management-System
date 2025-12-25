@@ -1,3 +1,12 @@
+com\cn\appointmentservice\dto\SpecializationDTO.class
+com\cn\appointmentservice\service\CircuitBreakerStatusService.class
+com\cn\appointmentservice\dto\AppointmentDTO.class
+com\cn\appointmentservice\mapper\AppointmentMapper.class
 com\cn\appointmentservice\service\AppointmentService.class
-com\cn\appointmentservice\AppointmentServiceApplication.class
+com\cn\appointmentservice\entity\Appointment.class
+com\cn\appointmentservice\dto\DoctorDTO.class
+com\cn\appointmentservice\repository\AppointmentRepository.class
+com\cn\appointmentservice\controller\CircuitController.class
 com\cn\appointmentservice\controller\AppointmentController.class
+com\cn\appointmentservice\cb\GrpcBusinessExceptionPredicate.class
+com\cn\appointmentservice\AppointmentServiceApplication.class

@@ -8,13 +8,17 @@ import com.cn.appointmentservice.repository.AppointmentRepository;
 import com.cn.protos.DoctorGetRequest;
 import com.cn.protos.DoctorGetResponse;
 import com.cn.protos.DoctorServiceGrpc;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
 
 @Service
+@Slf4j
 public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
@@ -27,9 +31,12 @@ public class AppointmentService {
     }
 
     @Transactional
+    @CircuitBreaker(name = "doctorService", fallbackMethod = "fallback")
     public String createAppointment(AppointmentDTO appointmentDto) {
 
-        DoctorGetResponse response = doctorStub.getDoctorDetails(
+        DoctorGetResponse response = doctorStub
+                .withDeadlineAfter(2,TimeUnit.SECONDS)
+                .getDoctorDetails(
                 DoctorGetRequest.newBuilder().setDoctorId(appointmentDto.getDoctorId().toString()).build()
         );
 
@@ -38,5 +45,13 @@ public class AppointmentService {
         return response.getName();
 
     }
+
+    public String fallback(AppointmentDTO appointmentDto, Throwable ex) {
+        log.error(ex.getMessage(), ex);
+        return "Fall back method";
+    }
+
+
+
 
 }

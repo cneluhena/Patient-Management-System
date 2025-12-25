@@ -2,6 +2,7 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/analytics-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/analytics-service/target/generated-sources/protobuf/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/api-gateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/appointment-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auth-service/src/main/java" charset="UTF-8" />
@@ -20,6 +21,9 @@
     <file url="file://$PROJECT_DIR$/patient-service/target/generated-sources/protobuf/grpc-java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/patient-service/target/generated-sources/protobuf/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/protos/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/protos/src/main/proto" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/protos/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/protos/target/generated-sources/protobuf/grpc-java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/protos/target/generated-sources/protobuf/java" charset="UTF-8" />
   </component>
 </project>
