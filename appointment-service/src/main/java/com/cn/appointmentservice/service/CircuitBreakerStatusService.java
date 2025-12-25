@@ -20,6 +20,8 @@ public class CircuitBreakerStatusService {
         log.info("I am chamod neluhena");
         log.info("I am chamod neluhena");
         log.info("I am chamod neluhena");
+        log.info("I am chamod neluhena");
+
 
         return cb.getState().name(); // CLOSED, OPEN, HALF_OPEN
     }
