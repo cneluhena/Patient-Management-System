@@ -47,7 +47,6 @@ public class AppointmentService {
     }
 
     public String fallback(AppointmentDTO appointmentDto, Throwable ex) {
-        log.error(ex.getMessage(), ex);
         return "Fall back method";
     }
 
