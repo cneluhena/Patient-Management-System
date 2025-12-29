@@ -1,13 +1,17 @@
 grpc:
+  server:
+    port: 9008
   client:
     doctor-service:
-      address: "static://localhost:9005"
+      address: "discovery:///doctor-service"
       negotiation-type: plaintext
 
 server:
   port: 4009
 
 spring:
+  application:
+    name: appointment-service
   config:
     import: "optional:file:.env[.properties]"
 
@@ -39,4 +43,12 @@ resilience4j:
     instances:
       doctorService:
         timeoutDuration: 2s
+
+eureka:
+  instance:
+    non-secure-port: ${server.port}
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
 

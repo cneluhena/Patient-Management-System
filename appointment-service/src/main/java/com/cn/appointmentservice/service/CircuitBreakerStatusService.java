@@ -17,16 +17,6 @@ public class CircuitBreakerStatusService {
 
     public String getDoctorServiceCircuitBreakerStatus() {
         CircuitBreaker cb = registry.circuitBreaker("doctorService");
-        log.info("I am chamod neluhena");
-        log.info("I am chamod neluhena");
-        log.info("I am chamod neluhena");
-        log.info("I am chamod neluhena");
-        log.info("I am chamod neluhena");
-
-
-        log.info("I am chamod neluhena");
-
-
         return cb.getState().name(); // CLOSED, OPEN, HALF_OPEN
     }
 }

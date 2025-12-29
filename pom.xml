@@ -24,6 +24,7 @@
         <module>doctor-service</module>
         <module>appointment-service</module>
         <module>patient-service</module>
+        <module>api-gateway</module>
     </modules>
 
     <!-- Spring Boot dependency management -->
@@ -33,6 +34,13 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>3.4.12</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>2024.0.3</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
