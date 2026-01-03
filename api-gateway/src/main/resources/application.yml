@@ -4,6 +4,25 @@ server:
 spring:
   application:
     name: api-gateway
+  config:
+    import: "optional:file:.env[.properties]"
+
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            scope: openid, profile, email
+        provider:
+          keycloak:
+            issuer-uri: ${ISSUER_URI}
+      resourceserver:
+        jwt:
+          issuer-uri: ${ISSUER_URI}
+
   cloud:
     gateway:
       routes:
@@ -20,6 +39,8 @@ spring:
             - name: Path
               args:
                 pattern: /api/v1/appointment/**
+          filters:
+            - TokenRelay=
 
         - id: appointment-service-circuit-route
           uri: lb://appointment-service

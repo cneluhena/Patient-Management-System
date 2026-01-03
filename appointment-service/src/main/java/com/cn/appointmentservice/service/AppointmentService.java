@@ -1,6 +1,5 @@
 package com.cn.appointmentservice.service;
 
-
 import com.cn.appointmentservice.dto.AppointmentDTO;
 import com.cn.appointmentservice.entity.Appointment;
 import com.cn.appointmentservice.mapper.AppointmentMapper;
@@ -50,8 +49,5 @@ public class AppointmentService {
         log.info("Help me");
         return "Fall back method";
     }
-
-
-
 
 }

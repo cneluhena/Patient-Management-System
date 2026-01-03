@@ -1,4 +1,4 @@
-package com.cn.authservice.config;
+package com.cn.appointmentservice.config;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

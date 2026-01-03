@@ -15,6 +15,12 @@ spring:
   config:
     import: "optional:file:.env[.properties]"
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8443/realms/patient
+
   datasource:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
