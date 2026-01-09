@@ -23,7 +23,7 @@ public class SpecializationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SpecializationDTO> getSpecialization(@PathVariable Long id){
+    public ResponseEntity<SpecializationDTO> getSpecialization(@PathVariable("id") Long id){
         SpecializationDTO dto = specializationService.getSpecializationById(id);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
