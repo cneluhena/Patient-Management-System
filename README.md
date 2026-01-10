@@ -23,16 +23,19 @@ Responsible for patient appointment-related tasks such as scheduling, updating, 
 ### 5. Service Discovery
 Implements the Eureka Server for service registration and discovery, enabling microservices to locate and communicate with each other dynamically.
 
+### 6. API Gateway
+Acts as a single entry point for all client requests, routing them to appropriate microservices. Handles cross-cutting concerns like authentication, logging, and load balancing.
+
 ## Technology Stack
 
 ### Backend
-- Java 17+
-- Spring Boot 3.x
+- Java 21+
+- Spring Boot 3.4.12
 - Spring Cloud (Eureka, Gateway)
 - Spring Data JPA
 - Spring Security with OAuth 2.0
 - Keycloak (Identity Management)
-- MySQL Database
+- PostgreSQL Database
 - Apache Kafka (Event Streaming)
 - Maven
 
@@ -45,11 +48,9 @@ Implements the Eureka Server for service registration and discovery, enabling mi
 
 Before running this application, ensure you have the following installed:
 
-- Java Development Kit (JDK) 17 or higher
-- Maven 3.6+
+- Java Development Kit (JDK) 21
 - Docker & Docker Compose
-- MySQL 8.0+
-- IDE (IntelliJ IDEA, Eclipse, or VS Code recommended)
+- PostgreSQL 17+
 
 ## Installation & Setup
 
@@ -62,30 +63,31 @@ cd Patient-Management-System
 
 ### 2. Setup Environment Variables
 
-Create a `.env` file in the root directory with the following variables:
+#### Auth Service Environment Variables
+
+Create a `.env` file inside the `auth-service` directory:
+
+```env
+# Keycloak Configuration
+KC_DB_URL=jdbc:postgresql://host.docker.internal:5432/keycloak
+KC_DB_USERNAME=postgres
+KC_DB_PASSWORD=postgres
+KC_BOOTSTRAP_ADMIN_USERNAME=admin
+KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+```
+
+#### Service Environment Variables
+
+Create a `.env` file inside the every service directory:
 
 ```env
 # Database Configuration
-MYSQL_ROOT_PASSWORD=rootpassword
-MYSQL_DATABASE=patient_management_db
-MYSQL_USER=pmsuser
-MYSQL_PASSWORD=pmspassword
-
-# Keycloak Configuration
-KEYCLOAK_ADMIN=admin
-KEYCLOAK_ADMIN_PASSWORD=admin123
-KEYCLOAK_DB_USER=keycloak
-KEYCLOAK_DB_PASSWORD=keycloakpassword
-
-# Kafka Configuration
-KAFKA_BROKER_ID=1
-KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-
-# Application Configuration
-EUREKA_SERVER_URL=http://localhost:8761/eureka
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_URL=jdbc:postgresql://localhost:5432/{dbname}
 ```
 
-**Important**: Make sure to add these variables as environment variables or use the `.env` file with Docker Compose.
+**Important**: Make sure to add these variables as environment variables in each respective service directory.
 
 ### 3. Start Keycloak Server
 
@@ -98,9 +100,9 @@ docker-compose up -d
 
 Keycloak will be available at `http://localhost:8080`
 
-- **Admin Console**: `http://localhost:8080/admin`
-- **Username**: admin (or value from `KEYCLOAK_ADMIN`)
-- **Password**: admin123 (or value from `KEYCLOAK_ADMIN_PASSWORD`)
+- **Admin Console**: `http://localhost:8443`
+- **Username**: admin (or value from `KC_BOOTSTRAP_ADMIN_USERNAME`)
+- **Password**: admin123 (or value from `KC_BOOTSTRAP_ADMIN_PASSWORD`)
 
 ### 4. Start Kafka Server
 
@@ -111,7 +113,7 @@ cd ..
 docker-compose up -d
 ```
 
-This will start both Kafka and Zookeeper services.
+This will start Kafka .
 
 ### 5. Start Microservices
 
@@ -153,45 +155,36 @@ mvn spring-boot:run
 
 Open the Eureka Dashboard at `http://localhost:8761` to verify that all services are registered successfully.
 
-## Service Ports
-
-| Service | Port |
-|---------|------|
-| Eureka Server | 8761 |
-| Auth Service | 8080 |
-| Doctor Service | 8081 |
-| Patient Service | 8082 |
-| Appointment Service | 8083 |
-| Keycloak | 8080 |
-| Kafka | 9092 |
-
 ## Project Structure
 
 ```
 Patient-Management-System/
 ├── auth-service/              # Authentication & Authorization
 │   ├── docker-compose.yml     # Keycloak setup
+│   ├── .env                   # Keycloak environment variables
 │   └── src/
 ├── doctor-service/            # Doctor management
+│   ├── .env                   # Doctor service database config
 │   └── src/
 ├── patient-service/           # Patient management
+│   ├── .env                   # Patient service database config
 │   └── src/
 ├── appointment-service/       # Appointment scheduling
+│   ├── .env                   # Appointment service database config
 │   └── src/
 ├── service-discovery/         # Eureka Server
 │   └── src/
 ├── docker-compose.yml         # Kafka & Zookeeper setup
-├── .env                       # Environment variables
 └── README.md
 ```
 
 ## API Gateway
 
-All microservices are accessed through the API Gateway (if configured). Direct service access:
+All microservices are accessed through the API Gateway:
 
-- **Doctor Service**: `http://localhost:8081/api/doctors`
-- **Patient Service**: `http://localhost:8082/api/patients`
-- **Appointment Service**: `http://localhost:8083/api/appointments`
+- **Doctor Service**: `http://localhost:4004/api/doctors`
+- **Patient Service**: `http://localhost:4004/api/patients`
+- **Appointment Service**: `http://localhost:4004/api/appointments`
 
 ## Authentication
 
@@ -218,33 +211,7 @@ The system uses Apache Kafka for asynchronous communication between services:
 - Verify Keycloak container is running: `docker ps`
 - Check Keycloak logs: `docker logs <keycloak-container-id>`
 
-### Kafka connectivity problems
-- Ensure Kafka and Zookeeper containers are running
-- Verify Kafka broker is accessible on port 9092
-
-## Stopping Services
-
-To stop all Docker containers:
-
-```bash
-docker-compose down
-```
-
 To stop individual microservices, use `Ctrl+C` in their respective terminal windows.
-
-## Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Contact
 
@@ -254,14 +221,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 **Project Link**: [https://github.com/cneluhena/Patient-Management-System](https://github.com/cneluhena/Patient-Management-System)
 
-## Acknowledgments
-
-- Spring Boot & Spring Cloud Documentation
-- Keycloak Community
-- Apache Kafka Project
-- Netflix Eureka
-- All contributors who have helped with this project
-
----
-
-**Note**: This is an educational/demonstration project. For production use in healthcare settings, ensure compliance with relevant regulations (HIPAA, GDPR, etc.) and implement appropriate security measures.
