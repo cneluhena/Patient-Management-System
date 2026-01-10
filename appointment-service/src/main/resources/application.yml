@@ -21,6 +21,15 @@ spring:
         jwt:
           issuer-uri: http://localhost:8443/realms/patient
 
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: appointment-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+      auto-offset-reset: earliest
+
   datasource:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
@@ -31,6 +40,9 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: true
+
+  flyway:
+    locations: classpath:db.migration
 
 resilience4j:
   circuitbreaker:

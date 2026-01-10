@@ -11,6 +11,20 @@ spring:
     url: ${DB_URL}
     driver-class-name: org.postgresql.Driver
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8443/realms/patient
+
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+
+
   jpa:
     hibernate:
       ddl-auto: none

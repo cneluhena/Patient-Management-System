@@ -38,6 +38,12 @@ spring:
             - name: Path
               args:
                 pattern: /api/v1/doctor-specialization/**
+        - id: appointment-consultation-route
+          uri: lb://appointment-service
+          predicates:
+            - name: Path
+              args:
+                pattern: /api/v1/consultation-session/**
 
         - id: appointment-service-route
           uri: lb://appointment-service

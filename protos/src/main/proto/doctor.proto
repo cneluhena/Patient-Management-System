@@ -28,3 +28,20 @@ message DoctorGetResponse {
 }
 
 
+message DoctorEvent {
+
+    enum EventType {
+      DOCTOR_CREATED = 0;
+      DOCTOR_UPDATED = 1;
+      DOCTOR_DELETED = 2;
+    }
+
+    EventType eventType = 1;
+    string doctorId = 2;
+    string name = 3;
+    repeated string specializations = 4;
+    int64 timestamp = 5;
+
+}
+
+

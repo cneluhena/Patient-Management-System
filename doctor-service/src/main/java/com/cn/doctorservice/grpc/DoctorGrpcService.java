@@ -29,6 +29,7 @@ public class DoctorGrpcService extends DoctorServiceGrpc.DoctorServiceImplBase {
 
         try {
             Optional<Doctor> optional = doctorRepository.findById(UUID.fromString(request.getDoctorId()));
+
             if (optional.isEmpty()) {
                 DoctorNotExists ex = new DoctorNotExists("Doctor not found with id " + request.getDoctorId());
                 responseObserver.onError(

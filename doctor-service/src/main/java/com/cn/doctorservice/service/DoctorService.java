@@ -16,9 +16,12 @@ public class DoctorService {
 
     private final SpecializationService specializationService;
 
-    public DoctorService(DoctorRepository doctorRepository, SpecializationService specializationService) {
+    private final DoctorEventPublisher doctorEventPublisher;
+
+    public DoctorService(DoctorRepository doctorRepository, SpecializationService specializationService, DoctorEventPublisher doctorEventPublisher) {
         this.doctorRepository = doctorRepository;
         this.specializationService = specializationService;
+        this.doctorEventPublisher = doctorEventPublisher;
     }
 
     @Transactional
@@ -28,6 +31,7 @@ public class DoctorService {
         Doctor doctor = DoctorMapper.toEntity(doctorDTO);
         doctor.setSpecializations(specializations);
         Doctor newDoctor = doctorRepository.save(doctor);
+        doctorEventPublisher.publishDoctorCreated(newDoctor);
         return DoctorMapper.toDTO(newDoctor);
 
     }
