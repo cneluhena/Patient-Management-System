@@ -9,9 +9,11 @@ public class AppointmentMapper {
 
         Appointment appointment = new Appointment();
         appointment.setId(appointmentDTO.getId());
+        appointment.setSessionId(appointmentDTO.getSessionId());
         appointment.setPatientId(appointmentDTO.getPatientId());
         appointment.setCreatedAt(appointmentDTO.getCreatedAt());
         appointment.setAppointmentDateTime(appointmentDTO.getAppointmentDateTime());
+        appointment.setStatus(appointmentDTO.getStatus());
         return appointment;
 
     }

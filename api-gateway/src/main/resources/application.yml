@@ -39,7 +39,7 @@ spring:
               args:
                 pattern: /api/v1/doctor-specialization/**
         - id: appointment-consultation-route
-          uri: lb://appointment-service
+          uri: lb://doctor-service
           predicates:
             - name: Path
               args:

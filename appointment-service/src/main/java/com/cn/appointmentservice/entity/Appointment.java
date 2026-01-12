@@ -1,9 +1,7 @@
 package com.cn.appointmentservice.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.cn.appointmentservice.enums.AppointmentStatus;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,23 +12,27 @@ import java.util.UUID;
 
 
 @Entity
-@Table(name="appointment")
+@Table(name="tbl_appointment")
 @Getter
 @Setter
 public class Appointment {
 
     @Id
     @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
 
-    @Column(name="doctor_id")
-    private UUID doctorId;
+    @Column(name="session_id")
+    private UUID sessionId;
 
     @Column(name="patient_id")
     private UUID patientId;
 
     @Column(name="created_at")
     private LocalDateTime createdAt;
+
+    @Column(name="appointment_status")
+    private AppointmentStatus status;
 
     @Column(name="appointment_date_time")
     private LocalDateTime appointmentDateTime;

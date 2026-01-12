@@ -1,7 +1,8 @@
-package com.cn.appointmentservice.controller;
+package com.cn.doctorservice.controller;
 
-import com.cn.appointmentservice.dto.ConsultationSessionDTO;
-import com.cn.appointmentservice.service.ConsultationService;
+
+import com.cn.doctorservice.dto.ConsultationSessionDTO;
+import com.cn.doctorservice.service.ConsultationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,11 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/consultation-session")
-public class ConsultingSessionController {
+public class ConsultationSessionController {
 
     private final ConsultationService consultationService;
 
-    public ConsultingSessionController(ConsultationService consultationService) {
+    public ConsultationSessionController(ConsultationService consultationService) {
         this.consultationService =  consultationService;
     }
 

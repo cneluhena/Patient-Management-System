@@ -1,8 +1,13 @@
 package com.cn.appointmentservice.service;
 
 
+import com.cn.appointmentservice.entity.Appointment;
 import com.cn.appointmentservice.entity.Doctor;
+import com.cn.appointmentservice.enums.AppointmentStatus;
+import com.cn.appointmentservice.exceptions.AppointmentNotExists;
+import com.cn.appointmentservice.repository.AppointmentRepository;
 import com.cn.appointmentservice.repository.DoctorRepository;
+import com.cn.protos.AppointmentEvent;
 import com.cn.protos.DoctorEvent;
 import com.google.protobuf.InvalidProtocolBufferException;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +23,12 @@ public class DoctorEventConsumerService {
 
     private final DoctorRepository doctorRepository;
 
-    public DoctorEventConsumerService(DoctorRepository doctorRepository) {
+    private final AppointmentRepository appointmentRepository;
+
+    public DoctorEventConsumerService(DoctorRepository doctorRepository, AppointmentRepository appointmentRepository) {
         this.doctorRepository = doctorRepository;
+        this.appointmentRepository = appointmentRepository;
+
     }
 
     @Transactional
@@ -35,6 +44,25 @@ public class DoctorEventConsumerService {
                 doctor.setSpecializations(doctorEvent.getSpecializationsList());
                 doctorRepository.save(doctor);
                 log.info("Doctor Created Event Recieved");
+            }
+
+        } catch (InvalidProtocolBufferException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Transactional
+    @KafkaListener(topics = "appointment-events", groupId = "appointment-confirmed-service")
+    public void consumeAppointmentEvent(byte[] event) {
+        log.info("Appointment confirmed Event Received");
+        try {
+            AppointmentEvent appointmentEvent = AppointmentEvent.parseFrom(event);
+
+            if ("APPOINTMENT_CONFIRMED".equals(appointmentEvent.getEventType().toString())) {
+                Appointment appointment = appointmentRepository.findById(UUID.fromString(appointmentEvent.getId())).orElseThrow(()->new AppointmentNotExists("Appointment does not Exists"));
+                appointment.setStatus(AppointmentStatus.CONFIRMED);
+                log.info("Appointment Confirmed Event Processed");
             }
 
         } catch (InvalidProtocolBufferException e) {

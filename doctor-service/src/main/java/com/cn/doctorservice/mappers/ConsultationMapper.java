@@ -1,17 +1,19 @@
-package com.cn.appointmentservice.mapper;
+package com.cn.doctorservice.mappers;
 
-import com.cn.appointmentservice.dto.ConsultationSessionDTO;
-import com.cn.appointmentservice.entity.ConsultationSession;
+
+import com.cn.doctorservice.dto.ConsultationSessionDTO;
+import com.cn.doctorservice.entity.ConsultationSession;
+import com.cn.doctorservice.entity.Doctor;
 
 public class ConsultationMapper {
 
-    public static ConsultationSession toEntity(ConsultationSessionDTO consultationSessionDTO) {
+    public static ConsultationSession toEntity(ConsultationSessionDTO consultationSessionDTO, Doctor doctor) {
 
         ConsultationSession consultationSession = new ConsultationSession();
         consultationSession.setId(consultationSessionDTO.getId());
-        consultationSession.setDoctorId(consultationSessionDTO.getDoctorId());
+        consultationSession.setDoctor(doctor);
         consultationSession.setTime(consultationSessionDTO.getTime());
-        consultationSession.setNumberOfPatients(consultationSessionDTO.getNumberOfPatients());
+        consultationSession.setMaxNumOfPatients(consultationSessionDTO.getNumberOfPatients());
 
         return consultationSession;
 

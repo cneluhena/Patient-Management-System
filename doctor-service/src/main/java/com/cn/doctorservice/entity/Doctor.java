@@ -27,4 +27,7 @@ public class Doctor {
     )
     private List<Specialization> specializations;
 
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<ConsultationSession> consultationSessions;
+
 }

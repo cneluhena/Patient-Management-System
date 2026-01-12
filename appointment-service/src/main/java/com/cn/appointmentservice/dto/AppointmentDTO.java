@@ -1,5 +1,6 @@
 package com.cn.appointmentservice.dto;
 
+import com.cn.appointmentservice.enums.AppointmentStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import lombok.Getter;
@@ -14,12 +15,14 @@ public class AppointmentDTO {
 
     private UUID id;
 
-    private UUID doctorId;
+    private UUID sessionId;
 
     private UUID patientId;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime appointmentDateTime;
+
+    private AppointmentStatus status;
 
 }

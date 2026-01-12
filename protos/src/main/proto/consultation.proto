@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.cn.protos";
+import "google/protobuf/timestamp.proto";
+
+
+service ConsultationService {
+  rpc GetConsultationDetails (ConsultationSessionGetRequest) returns (ConsultationSessionGetResponse);
+}
+
+message ConsultationSessionGetRequest {
+  string sessionId = 1;
+}
+
+
+message ConsultationSessionGetResponse {
+  string consultationSessionId = 1;
+}
+
+

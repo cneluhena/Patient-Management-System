@@ -66,4 +66,5 @@ public class DoctorGrpcService extends DoctorServiceGrpc.DoctorServiceImplBase {
         }
 
     }
+
 }

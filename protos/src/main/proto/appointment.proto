@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.cn.protos";
+
+message AppointmentEvent {
+
+  enum EventType {
+    APPOINTMENT_CREATED = 0;
+    APPOINTMENT_UPDATED = 1;
+    APPOINTMENT_DELETED = 2;
+    APPOINTMENT_FAILED = 3;
+    APPOINTMENT_CONFIRMED = 4;
+  }
+
+  EventType eventType = 1;
+  string id = 2;
+  string sessionId = 3;
+  string patientId = 4;
+
+}
+

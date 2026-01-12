@@ -18,8 +18,8 @@ public class AppointmentController {
 
     @PostMapping
     public ResponseEntity<?> createAppointment(@RequestBody AppointmentDTO appointmentDto) {
-        String doctor = appointmentService.createAppointment(appointmentDto);
-        return ResponseEntity.ok().body(doctor);
+        appointmentService.createAppointment(appointmentDto);
+        return ResponseEntity.ok().body("Appointment Created Successfully");
     }
 
 }
