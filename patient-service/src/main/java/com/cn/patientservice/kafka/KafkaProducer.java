@@ -18,6 +18,7 @@ public class KafkaProducer {
     }
 
     public void sendEvent(Patient patient) {
+
         PatientEvent patientEvent = PatientEvent.newBuilder()
                 .setPatientId(patient.getId().toString())
                 .setName(patient.getName())
@@ -31,7 +32,6 @@ public class KafkaProducer {
             log.error("Error sending Patient Created Event {}", patientEvent);
 
         }
-
 
     }
 

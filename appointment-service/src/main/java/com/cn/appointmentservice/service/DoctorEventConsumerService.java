@@ -1,6 +1,5 @@
 package com.cn.appointmentservice.service;
 
-
 import com.cn.appointmentservice.entity.Appointment;
 import com.cn.appointmentservice.entity.Doctor;
 import com.cn.appointmentservice.enums.AppointmentStatus;
@@ -14,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.UUID;
 
 @Service
@@ -28,7 +26,6 @@ public class DoctorEventConsumerService {
     public DoctorEventConsumerService(DoctorRepository doctorRepository, AppointmentRepository appointmentRepository) {
         this.doctorRepository = doctorRepository;
         this.appointmentRepository = appointmentRepository;
-
     }
 
     @Transactional

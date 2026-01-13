@@ -17,7 +17,9 @@ public class AppointmentServiceEventPublisher {
     }
 
     public void publishAppointmentCreatedEvent(Appointment appointment) {
+
         log.info("publishing");
+
         AppointmentEvent event = AppointmentEvent.newBuilder()
                 .setId(appointment.getId().toString())
                 .setEventType(AppointmentEvent.EventType.APPOINTMENT_CREATED)

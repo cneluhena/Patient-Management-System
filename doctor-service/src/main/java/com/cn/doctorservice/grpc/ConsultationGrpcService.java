@@ -1,22 +1,14 @@
 package com.cn.doctorservice.grpc;
 
-import com.cn.doctorservice.entity.ConsultationSession;
-import com.cn.doctorservice.entity.Doctor;
-import com.cn.doctorservice.exceptions.ConsultationSessionNotExists;
-import com.cn.doctorservice.exceptions.DoctorNotExists;
+import com.cn.doctorservice.exceptions.SessionAlreadyFullyBooked;
 import com.cn.doctorservice.repository.ConsultationRepository;
-import com.cn.doctorservice.repository.DoctorRepository;
-import com.cn.protos.ConsultationSessionGetRequest;
-import com.cn.protos.ConsultationSessionGetResponse;
-import com.cn.protos.DoctorGetResponse;
+import com.cn.protos.*;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
-import com.cn.protos.ConsultationServiceGrpc;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @GrpcService
@@ -25,6 +17,55 @@ public class ConsultationGrpcService extends ConsultationServiceGrpc.Consultatio
 
     @Autowired
     ConsultationRepository consultationRepository;
+
+    //reserve session
+    @Override
+    public void reserveConsultationSession(SessionReserveRequest request,
+                                       StreamObserver<SessionReserveResponse> responseObserver) {
+        try {
+
+            int updated = consultationRepository.reserveSession(UUID.fromString(request.getSessionId()));
+
+            if (updated == 0) {
+                log.error("Session Already Fully Booked");
+                SessionAlreadyFullyBooked ex = new SessionAlreadyFullyBooked("Session Already Fully Booked");
+                responseObserver.onError(
+                        Status.FAILED_PRECONDITION
+                                .withDescription("SESSION_BOOKED")
+                                .asRuntimeException()
+                );
+                return;
+            } else {
+
+                SessionReserveResponse response =  SessionReserveResponse.newBuilder()
+                        .setSessionResponse(true)
+                        .build();
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
+
+            }
+
+        } catch (IllegalArgumentException e) {
+            responseObserver.onError(
+                    Status.INVALID_ARGUMENT
+                            .withDescription("Invalid Consultation Session ID")
+                            .asRuntimeException()
+            );
+        } catch (Exception e) {
+            log.error("Service Failed");
+            responseObserver.onError(
+                    Status.INTERNAL
+                            .withDescription("Doctor service failure")
+                            .asRuntimeException()
+            );
+        }
+
+
+
+
+    }
+
+
 //    @Override
 //    public void getConsultationDetails(ConsultationSessionGetRequest request,
 //                                       StreamObserver<ConsultationSessionGetResponse> responseObserver) {

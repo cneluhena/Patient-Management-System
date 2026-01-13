@@ -15,4 +15,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiError(e.getMessage(), HttpStatus.NOT_FOUND.value()));
     }
 
+    @ExceptionHandler(value = { SessionAlreadyFullyBooked.class })
+    public ResponseEntity<ApiError> handleSessionAlreadyBookedException(SessionAlreadyFullyBooked e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiError(e.getMessage(), HttpStatus.CONFLICT.value()));
+    }
+
+
 }

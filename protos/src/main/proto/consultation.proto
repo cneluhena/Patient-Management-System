@@ -7,12 +7,20 @@ import "google/protobuf/timestamp.proto";
 
 service ConsultationService {
   rpc GetConsultationDetails (ConsultationSessionGetRequest) returns (ConsultationSessionGetResponse);
+  rpc ReserveConsultationSession(SessionReserveRequest) returns (SessionReserveResponse);
+}
+
+message SessionReserveRequest {
+  string sessionId = 1;
+}
+
+message SessionReserveResponse {
+  bool sessionResponse = 1;
 }
 
 message ConsultationSessionGetRequest {
   string sessionId = 1;
 }
-
 
 message ConsultationSessionGetResponse {
   string consultationSessionId = 1;
