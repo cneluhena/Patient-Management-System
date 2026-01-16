@@ -2,22 +2,59 @@ spring:
   application:
     name: patient-service
 
-  jpa:
-    hibernate:
-      ddl-auto: update
+  config:
+    import: optional:file:.env[.properties]
 
-  sql:
-    init:
-      mode: always
+  datasource:
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: ${DB_URL}
+    driver-class-name: org.postgresql.Driver
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8443/realms/patient
+
 
   kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: patient-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+      auto-offset-reset: earliest
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
 
-server:
-  port: 4000
 
-logging:
-  level:
-    root: info
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+  flyway:
+    locations: classpath:db.migration
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+server:
+  port: 4010
+
+grpc:
+  server:
+    port: 9006
+
+eureka:
+  instance:
+    non-secure-port: ${server.port}
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

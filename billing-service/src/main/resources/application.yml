@@ -1,0 +1,75 @@
+grpc:
+  server:
+    port: 9001
+  client:
+    doctor-service:
+      address: "discovery:///billing-service"
+      negotiation-type: plaintext
+
+server:
+  port: 4001
+
+spring:
+  application:
+    name: billing-service
+  config:
+    import: "optional:file:.env[.properties]"
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8443/realms/patient
+
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: appointment-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+
+  datasource:
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: ${DB_URL}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+  flyway:
+    locations: classpath:db.migration
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      doctorService:
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        recordExceptions:
+          - io.grpc.StatusRuntimeException
+        ignoreExceptionPredicate: com.cn.billingservice.cb.GrpcBusinessExceptionPredicate
+
+  timelimiter:
+    instances:
+      doctorService:
+        timeoutDuration: 2s
+
+eureka:
+  instance:
+    non-secure-port: ${server.port}
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+

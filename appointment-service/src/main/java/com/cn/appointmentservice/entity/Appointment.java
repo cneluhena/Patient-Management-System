@@ -2,8 +2,6 @@ package com.cn.appointmentservice.entity;
 
 import com.cn.appointmentservice.enums.AppointmentStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 

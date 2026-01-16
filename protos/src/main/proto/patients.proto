@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.cn.protos";
+
+message PatientEvent {
+
+  enum EventType {
+    PATIENT_CREATED = 0;
+
+  }
+
+  EventType eventType = 1;
+  string patientId = 2;
+
+}

@@ -12,4 +12,10 @@ Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd doctor-service
 Write-Host "Starting appointment-service..."
 Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd appointment-service; mvn spring-boot:run"
 
+Write-Host "Starting patient-service..."
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd patient-service; mvn spring-boot:run"
+
+Write-Host "Starting billing-service..."
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd billing-service; mvn spring-boot:run"
+
 Write-Host "All services started!"
